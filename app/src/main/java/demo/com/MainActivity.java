@@ -1,5 +1,6 @@
 package demo.com;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -17,9 +18,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // получаем значения из метода onSaveInstanceState()
+        // например после изменения ориентации экрана
+        if (savedInstanceState != null) {
+            seconds = savedInstanceState.getInt("seconds");
+            isRunning = savedInstanceState.getBoolean("isRunning");
+        }
         textViewTimer = findViewById(R.id.textViewTimer);
         Button buttonStart = findViewById(R.id.buttonStart);
         Button buttonPause = findViewById(R.id.buttonPause);
@@ -33,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         runTimer();
+    }
+
+    // метод onSaveInstanceState() сохраняет текущее состояние активности
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("seconds", seconds);
+        outState.putBoolean("isRunning", isRunning);
     }
 
     private void runTimer() {
